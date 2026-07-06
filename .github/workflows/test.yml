@@ -1,0 +1,30 @@
+name: Automatic Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check required files
+        shell: bash
+        run: |
+          test -f index.html
+          test -f style.css
+          test -f app.js
+
+      - name: Check JavaScript syntax
+        run: node --check app.js
