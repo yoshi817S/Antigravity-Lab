@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HOME AI CONTROL PANEL - MODEL 1978</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- 1920x1080のアスペクト比を維持するためのコンテナ -->
+  <div id="console-viewport">
+    
+    <!-- メインコンソール筐体 -->
+    <main id="control-console">
+      
+      <!-- 上部インジケーター・パネル (ステータスランプ群) -->
+      <header class="console-panel top-bar">
+        <div class="logo">🌌 COSMO-LINK AI-78</div>
+        <div class="status-lamps">
+          <div class="lamp-group">
+            <span class="lamp-label">SYS ACTIVE</span>
+            <div id="lamp-sys-active" class="lamp lamp-green active"></div>
+          </div>
+          <div class="lamp-group">
+            <span class="lamp-label">CAUTION</span>
+            <div id="lamp-caution" class="lamp lamp-yellow"></div>
+          </div>
+          <div class="lamp-group">
+            <span class="lamp-label">EMERGENCY</span>
+            <div id="lamp-emergency" class="lamp lamp-red"></div>
+          </div>
+          <div class="lamp-group">
+            <span class="lamp-label">LINE STAT</span>
+            <div id="lamp-line" class="lamp lamp-green active"></div>
+          </div>
+        </div>
+      </header>
+
+      <!-- メインディスプレイエリア (CRTモニター風) -->
+      <section class="crt-monitor-frame">
+        <div class="crt-screen">
+          <!-- 走査線とガラスの湾曲表現用オーバーレイ (CSSで制御) -->
+          <div class="crt-overlay"></div>
+          
+          <div class="screen-content">
+            <!-- 左カラム：システムログとステータス表示 -->
+            <div class="screen-column col-left">
+              <!-- 上半分：システムログ -->
+              <div class="widget status-log-widget split-top">
+                <div class="widget-header">SYSTEM LOG & DIAGNOSTICS</div>
+                <div id="system-log-content" class="widget-body log-text">
+                  <!-- JSでレトロなタイピング風にダミーログを出力 -->
+                </div>
+              </div>
+
+              <!-- 下半分：3つの小パネル (ステータスインジケーター) -->
+              <div class="sub-panels-container split-bottom">
+                
+                <!-- NETWORK STATUS -->
+                <div class="widget sub-panel" id="panel-network">
+                  <div class="widget-header">NETWORK STATUS</div>
+                  <div class="widget-body sub-panel-body">
+                    <div class="status-row">
+                      <span class="status-label">LINK:</span>
+                      <span class="status-value val-green" id="status-net-link">ONLINE</span>
+                    </div>
+                    <div class="status-row">
+                      <span class="status-label">BPS:</span>
+                      <span class="status-value val-green" id="status-net-speed">4.8k bps</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- AI STATUS -->
+                <div class="widget sub-panel" id="panel-ai">
+                  <div class="widget-header">AI STATUS</div>
+                  <div class="widget-body sub-panel-body">
+                    <div class="status-row">
+                      <span class="status-label">SYS CORE:</span>
+                      <span class="status-value val-green" id="status-ai-core">ACTIVE</span>
+                    </div>
+                    <div class="status-row">
+                      <span class="status-label">LOAD:</span>
+                      <span class="status-value val-green" id="status-ai-load">012%</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- HOME ENVIRONMENT -->
+                <div class="widget sub-panel" id="panel-env">
+                  <div class="widget-header">HOME ENV</div>
+                  <div class="widget-body sub-panel-body">
+                    <div class="status-row">
+                      <span class="status-label">SECURITY:</span>
+                      <span class="status-value val-green" id="status-env-sec">SECURE</span>
+                    </div>
+                    <div class="status-row">
+                      <span class="status-label">AIR QLTY:</span>
+                      <span class="status-value val-green" id="status-env-air">GOOD</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- 中央カラム：アナログメーターと環境計器 -->
+            <div class="screen-column col-center">
+              <!-- 環境モニター -->
+              <div class="widget env-widget">
+                <div class="widget-header">ENVIRONMENT METERS</div>
+                <div class="widget-body meters-grid">
+                  <!-- アナログ風メーター (CSS/SVGで針を動かす) -->
+                  <div class="analog-gauge" id="gauge-temp">
+                    <svg viewBox="0 0 100 60" class="gauge-svg">
+                      <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="#224433" stroke-width="6"/>
+                      <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="var(--primary-color)" stroke-dasharray="125" stroke-dashoffset="125" stroke-width="6" class="gauge-bar" id="bar-temp"/>
+                      <line x1="50" y1="50" x2="50" y2="15" stroke="#ff3333" stroke-width="2" class="gauge-needle" id="needle-temp" />
+                      <circle cx="50" cy="50" r="4" fill="#ff3333" />
+                    </svg>
+                    <div class="gauge-value"><span id="val-temp">24.5</span>°C</div>
+                    <div class="gauge-label">INTERNAL TEMP</div>
+                  </div>
+
+                  <div class="analog-gauge" id="gauge-humidity">
+                    <svg viewBox="0 0 100 60" class="gauge-svg">
+                      <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="#224433" stroke-width="6"/>
+                      <path d="M 10 50 A 40 40 0 0 1 90 50" fill="none" stroke="var(--primary-color)" stroke-dasharray="125" stroke-dashoffset="125" stroke-width="6" class="gauge-bar" id="bar-humidity"/>
+                      <line x1="50" y1="50" x2="50" y2="15" stroke="#ff3333" stroke-width="2" class="gauge-needle" id="needle-humidity" />
+                      <circle cx="50" cy="50" r="4" fill="#ff3333" />
+                    </svg>
+                    <div class="gauge-value"><span id="val-humidity">55</span>%</div>
+                    <div class="gauge-label">HUMIDITY</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- オシロスコープ波形 -->
+              <div class="widget wave-widget">
+                <div class="widget-header">AI THINKING WAVEFORM</div>
+                <div class="widget-body wave-body">
+                  <canvas id="canvas-oscilloscope"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <!-- 右カラム：レーダーと時間表示 -->
+            <div class="screen-column col-right">
+              <!-- セキュリティレーダー -->
+              <div class="widget radar-widget">
+                <div class="widget-header">LOCAL RADAR SCANNER</div>
+                <div class="widget-body radar-body">
+                  <canvas id="canvas-radar"></canvas>
+                </div>
+              </div>
+
+              <!-- ミッションタイマー & 時刻表示 -->
+              <div class="widget time-widget">
+                <div class="widget-header">SYSTEM CLOCK</div>
+                <div class="widget-body time-body">
+                  <div class="digital-clock-segment" id="clock-time">00:00:00</div>
+                  <div class="time-sub-info">
+                    <div class="sub-time-item">
+                      <span class="label">UPTIME</span>
+                      <span id="uptime-counter" class="value">000:00:00</span>
+                    </div>
+                    <div class="sub-time-item">
+                      <span class="label">DATE</span>
+                      <span id="system-date" class="value">1978-06-22</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- 下部物理スイッチ・パネル -->
+      <footer class="console-panel bottom-control">
+        <div class="switch-row">
+          
+          <div class="switch-control">
+            <span class="switch-label">RADAR SCAN</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="switch-radar" checked>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
+          <div class="switch-control">
+            <span class="switch-label">MONITOR STYLE</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="switch-style">
+              <span class="switch-slider"></span>
+            </label>
+            <span class="switch-sub-label">AMBER / GREEN</span>
+          </div>
+
+          <div class="switch-control">
+            <span class="switch-label">EMERGENCY CLAMP</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="switch-emergency">
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
+          <div class="switch-control">
+            <span class="switch-label">LOG FEED</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="switch-log" checked>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+
+        </div>
+      </footer>
+
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
